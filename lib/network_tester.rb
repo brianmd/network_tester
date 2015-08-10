@@ -3,11 +3,11 @@ require_relative "network_tester/version"
 module NetworkTester
 	module_function
 
-  def notifier(time)
+  def notifier(time, maxtime=70)
     time = Float(time)
     if time < 10
       notify('wee')
-    elsif time > 70
+    elsif time > maxtime
       notify(Integer(time), rate=Integer(time)*2)
     end
   rescue => e
@@ -34,12 +34,12 @@ module NetworkTester
     end
   end
  
-  def loop(max_count=nil, addr='google.com')
+  def loop(max_count=nil, addr='google.com', maxtime=70)
     count = 1
     while (max_count.nil? or count<max_count)
       time = pingr
       print time.inspect
-      notifier(time)
+      notifier(time, maxtime)
       sleep 1
     end
   rescue => e

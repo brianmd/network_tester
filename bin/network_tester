@@ -5,4 +5,9 @@ $LOAD_PATH.unshift Pathname.new(__FILE__).dirname + '..'
 
 require_relative '../lib/network_tester'
 
-NetworkTester::loop
+puts 'asdfjlfdls'
+puts ARGV.inspect
+maxtime = 70
+maxtime = Integer(ARGV[0]) if ARGV.size>0
+puts maxtime
+NetworkTester::loop(nil, 'google.com', maxtime)
