@@ -1,12 +1,18 @@
 # NetworkTester
 
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/network_tester`. To experiment with that code, run `bin/console` for an interactive prompt.
+Announces the number of milliseconds it takes for a ping response. Can pass the millisecond threshold before announcement.
 
-TODO: Delete this and the text above, and describe your gem
+When diagnosing network issues, you may want to plug and unplug ethernet cables to search for a problem. The genesis of this project is I wanted a way to do this without carrying my laptop around and looking at it all the time.
+
+On a Mac, the number of milliseconds taken by the ping is announced. On Linux, I believe there is an audible beep when the ping takes longer than the threshold. (Untested.)
 
 ## Installation
 
-Add this line to your application's Gemfile:
+Install it to get the bin file:
+
+    $ gem install network_tester
+
+Or add this line to your application's Gemfile:
 
 ```ruby
 gem 'network_tester'
@@ -16,13 +22,11 @@ And then execute:
 
     $ bundle
 
-Or install it yourself as:
-
-    $ gem install network_tester
-
 ## Usage
 
-TODO: Write usage instructions here
+After installing the gem, you may need to open a new shell, and then type:
+
+    network_tester <millisecond_threshold>
 
 ## Development
 
