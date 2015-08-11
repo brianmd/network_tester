@@ -3,50 +3,49 @@ require_relative "network_tester/version"
 module NetworkTester
 	module_function
 
-  def notifier(time, maxtime=70)
-    time = Float(time)
-    if time < 10
-      notify('wee')
-    elsif time > maxtime
-      notify(Integer(time), rate=Integer(time)*2)
+  def loop(max_count=nil, addr='google.com', maxtime=70)
+    count = 1
+    while (max_count.nil? or count<max_count)
+      time = pingr
+      if time.nil?
+        puts "' '*50}error"
+      else
+        time = Integer(Float(time))
+        puts "#{'*'*(Integer(time/5))} #{time}"
+      end
+      notifier(time, maxtime)
+      sleep 1
     end
-  rescue => e
-    notify("error",500)
-    puts "\n\n#{e} when trying notifier(#{time.inspect})"
-    puts e.backtrace
   end
 
   def pingr(addr='google.com')
-    result = `ping -c 1 -t 1 #{addr}`
+    result = `ping -c 1 -t 1 #{addr} 2>/dev/null`
     timerow = nil
     result.split("\n").detect do |r|
-      if r.match /time/
-        print "\n#{r}  "
-        timerow = r.match /cmp_seq.*time=([^ ]*)/
+      if r.match(/time/)
+        timerow = r.match(/cmp_seq.*time=([^ ]*)/)
       end
     end
 
     if timerow.nil?
-      puts result.inspect
       nil
     else
       timerow[1] 
     end
   end
  
-  def loop(max_count=nil, addr='google.com', maxtime=70)
-    count = 1
-    while (max_count.nil? or count<max_count)
-      time = pingr
-      print time.inspect
-      notifier(time, maxtime)
-      sleep 1
+  def notifier(time, maxtime=70)
+    if time.nil?
+      return notify('error')
     end
-  rescue => e
-    puts 'error, probably not a float'
-    puts e
-    puts e.backtrace
-    notify 'pinger error'
+
+    time = Float(time)
+    if time < 10
+      notify('wee')
+    elsif time > maxtime
+      notify(Integer(time), Integer(time)*2)
+    end
+    time
   end
 
   def notify(msg='da', rate=600)
@@ -55,5 +54,6 @@ module NetworkTester
     else
       puts "\a", "*********"*10, msg.inspect
     end
+    msg
   end
 end
