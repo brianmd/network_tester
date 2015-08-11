@@ -12,6 +12,10 @@ Install it to get the bin file:
 
     $ gem install network_tester
 
+OR, if you don't have rvm/rbenv installed, you may need to get it this way:
+
+    $ sudo gem install network_tester
+
 Or add this line to your application's Gemfile:
 
 ```ruby
