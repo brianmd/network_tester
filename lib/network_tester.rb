@@ -16,6 +16,7 @@ module NetworkTester
       notifier(time, maxtime)
       sleep 1
     end
+  rescue Interrupt
   end
 
   def pingr(addr='google.com')
