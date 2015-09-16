@@ -8,7 +8,7 @@ module NetworkTester
     while (max_count.nil? or count<max_count)
       time = pingr
       if time.nil?
-        puts "' '*50}error"
+        puts "#{' '*50}error"
       else
         time = Integer(Float(time))
         puts "#{'*'*(Integer(time/5))} #{time}"
@@ -19,7 +19,9 @@ module NetworkTester
   end
 
   def pingr(addr='google.com')
-    result = `ping -c 1 -t 1 #{addr} 2>/dev/null`
+    timeout_arg = mac? ? '-t' : '-W'
+    cmd = "ping -c 1 #{timeout_arg} 1 #{addr} "
+    result = `#{cmd} 2>/dev/null`
     timerow = nil
     result.split("\n").detect do |r|
       if r.match(/time/)
@@ -49,11 +51,15 @@ module NetworkTester
   end
 
   def notify(msg='da', rate=600)
-    if `uname -s`.chomp=='Darwin'
+    if mac?
       `say #{msg.inspect} -r #{[rate,400].max}`
     else
-      puts "\a", "*********"*10, msg.inspect
+      puts "\a#{'-'*30} too long: #{msg.inspect}"
     end
     msg
+  end
+
+  def mac?
+    `uname -s`.chomp=='Darwin'
   end
 end
