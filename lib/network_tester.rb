@@ -54,7 +54,7 @@ module NetworkTester
     if mac?
       `say #{msg.inspect} -r #{[rate,400].max}`
     else
-      puts "\a#{'-'*30} too long: #{msg.inspect}"
+      puts "\a#{' '*20}#{'-'*10} too long: #{msg.inspect}"
     end
     msg
   end
