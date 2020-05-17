@@ -30,7 +30,7 @@ And then execute:
 
 After installing the gem, you may need to open a new shell, and then type:
 
-    network_tester <millisecond_threshold>
+    network_tester [millisecond_threshold=70] [ipaddr=google.com]
 
 ## Development
 
