@@ -6,7 +6,7 @@ module NetworkTester
   def loop(max_count=nil, addr='google.com', maxtime=70)
     count = 1
     while (max_count.nil? or count<max_count)
-      time = pingr
+      time = pingr(addr)
       if time.nil?
         puts "#{' '*50}error"
       else
