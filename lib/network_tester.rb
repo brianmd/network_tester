@@ -1,3 +1,4 @@
+require "shellwords"
 require_relative "network_tester/version"
 
 module NetworkTester
@@ -21,22 +22,12 @@ module NetworkTester
 
   def pingr(addr='google.com')
     timeout_arg = mac? ? '-t' : '-W'
-    cmd = "ping -c 1 #{timeout_arg} 1 #{addr} "
+    cmd = "ping -c 1 #{timeout_arg} 1 #{Shellwords.shellescape(addr)}"
     result = `#{cmd} 2>/dev/null`
-    timerow = nil
-    result.split("\n").detect do |r|
-      if r.match(/time/)
-        timerow = r.match(/cmp_seq.*time=([^ ]*)/)
-      end
-    end
-
-    if timerow.nil?
-      nil
-    else
-      timerow[1] 
-    end
+    match = result.match(/time=([^\s]+)/)
+    match&.[](1)
   end
- 
+
   def notifier(time, maxtime=70)
     if time.nil?
       return notify('error')
@@ -53,7 +44,7 @@ module NetworkTester
 
   def notify(msg='da', rate=600)
     if mac?
-      `say #{msg.inspect} -r #{[rate,400].max}`
+      system("say", msg.to_s, "-r", [rate, 400].max.to_s)
     else
       puts "\a#{' '*20}#{'-'*10} too long: #{msg.inspect}"
     end

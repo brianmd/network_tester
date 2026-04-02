@@ -12,10 +12,15 @@ OptionParser.new do |opts|
     Usage: network_tester [options]
            network_tester [maxtime] [address]
 
+    Positional arguments can be given in any order. Integers are
+    treated as the alert threshold; anything else as the host.
+
     Examples:
       network_tester                  # ping google.com, alert above 70ms
       network_tester 100              # ping google.com, alert above 100ms
-      network_tester 100 8.8.8.8     # ping 8.8.8.8, alert above 100ms
+      network_tester yahoo.com        # ping yahoo.com, alert above 70ms
+      network_tester 100 yahoo.com   # ping yahoo.com, alert above 100ms
+      network_tester yahoo.com 100   # same as above
 
     Options:
   BANNER
@@ -39,8 +44,13 @@ OptionParser.new do |opts|
   end
 end.parse!
 
-# Remaining positional args: [maxtime] [address]
-options[:maxtime] = Integer(ARGV[0]) if ARGV[0]
-options[:address] = ARGV[1] if ARGV[1]
+# Positional args in any order: integers are maxtime, anything else is address
+ARGV.each do |arg|
+  if arg.match?(/\A\d+\z/)
+    options[:maxtime] = Integer(arg)
+  else
+    options[:address] = arg
+  end
+end
 
 NetworkTester.loop(nil, options[:address], options[:maxtime])

@@ -27,6 +27,9 @@ After installing the gem, you may need to open a new shell, and then type:
     network_tester [options]
     network_tester [maxtime] [address]
 
+Positional arguments can be given in any order. Integers are treated as
+the alert threshold; anything else as the host.
+
 ### Options
 
     -a, --address ADDRESS   Host to ping (default: google.com)
@@ -38,8 +41,10 @@ After installing the gem, you may need to open a new shell, and then type:
 
     network_tester                       # ping google.com, alert above 70ms
     network_tester 100                   # ping google.com, alert above 100ms
-    network_tester 100 8.8.8.8          # ping 8.8.8.8, alert above 100ms
-    network_tester -a 8.8.8.8 -m 100   # same, using named options
+    network_tester yahoo.com             # ping yahoo.com, alert above 70ms
+    network_tester 100 yahoo.com        # ping yahoo.com, alert above 100ms
+    network_tester yahoo.com 100        # same as above
+    network_tester -a 8.8.8.8 -m 100   # using named options
 
 ## Development
 
