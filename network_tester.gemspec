@@ -19,7 +19,7 @@ Gem::Specification.new do |spec|
   spec.executables   = ['network_tester']
   spec.require_paths = ["lib"]
 
-  spec.add_development_dependency "bundler", "~> 1.10"
+  spec.add_development_dependency "bundler", ">= 2.1"
   spec.add_development_dependency "rake", "~> 12.3.3"
   spec.add_development_dependency "rspec"
 end
