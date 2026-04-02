@@ -1,14 +1,46 @@
 #!/usr/bin/env ruby
-require 'pathname'
+require "optparse"
+require_relative "../lib/network_tester"
 
-$LOAD_PATH.unshift Pathname.new(__FILE__).dirname + '..'
+options = {
+  maxtime: 70,
+  address: "google.com"
+}
 
-require_relative '../lib/network_tester'
+OptionParser.new do |opts|
+  opts.banner = <<~BANNER
+    Usage: network_tester [options]
+           network_tester [maxtime] [address]
 
-default_maxtime = 70
-ipaddr = 'google.com'
+    Examples:
+      network_tester                  # ping google.com, alert above 70ms
+      network_tester 100              # ping google.com, alert above 100ms
+      network_tester 100 8.8.8.8     # ping 8.8.8.8, alert above 100ms
 
-default_maxtime = Integer(ARGV[0]) if ARGV.size>0
-ipaddr = ARGV[1] if ARGV.size>1
+    Options:
+  BANNER
 
-NetworkTester::loop(nil, ipaddr, default_maxtime)
+  opts.on("-a", "--address ADDRESS", "Host to ping (default: google.com)") do |addr|
+    options[:address] = addr
+  end
+
+  opts.on("-m", "--maxtime MS", Integer, "Alert threshold in ms (default: 70)") do |ms|
+    options[:maxtime] = ms
+  end
+
+  opts.on("-h", "--help", "Show this help message") do
+    puts opts
+    exit
+  end
+
+  opts.on("-v", "--version", "Show version") do
+    puts NetworkTester::VERSION
+    exit
+  end
+end.parse!
+
+# Remaining positional args: [maxtime] [address]
+options[:maxtime] = Integer(ARGV[0]) if ARGV[0]
+options[:address] = ARGV[1] if ARGV[1]
+
+NetworkTester.loop(nil, options[:address], options[:maxtime])

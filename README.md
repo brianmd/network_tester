@@ -1,20 +1,14 @@
 # NetworkTester
 
-Announces the number of milliseconds it takes for a ping response. Can pass the millisecond threshold before announcement.
+Announces the number of milliseconds it takes for a ping response. When the ping exceeds a configurable threshold, it alerts you audibly (speech on Mac, terminal bell on Linux).
 
 When diagnosing network issues, you may want to plug and unplug ethernet cables to search for a problem. The genesis of this project is I wanted a way to do this without carrying my laptop around and looking at it all the time.
 
-On a Mac, the number of milliseconds taken by the ping is announced. On Linux, I believe there is an audible beep when the ping takes longer than the threshold. (Untested.)
+On a Mac, the number of milliseconds taken by the ping is spoken aloud. On Linux, a terminal bell and text warning are printed when the ping exceeds the threshold.
 
 ## Installation
 
-Install it to get the bin file:
-
     $ gem install network_tester
-
-OR, if you don't have rvm/rbenv installed, you may need to get it this way:
-
-    $ sudo gem install network_tester
 
 Or add this line to your application's Gemfile:
 
@@ -30,7 +24,22 @@ And then execute:
 
 After installing the gem, you may need to open a new shell, and then type:
 
-    network_tester [millisecond_threshold=70] [ipaddr=google.com]
+    network_tester [options]
+    network_tester [maxtime] [address]
+
+### Options
+
+    -a, --address ADDRESS   Host to ping (default: google.com)
+    -m, --maxtime MS        Alert threshold in ms (default: 70)
+    -h, --help              Show help message
+    -v, --version           Show version
+
+### Examples
+
+    network_tester                       # ping google.com, alert above 70ms
+    network_tester 100                   # ping google.com, alert above 100ms
+    network_tester 100 8.8.8.8          # ping 8.8.8.8, alert above 100ms
+    network_tester -a 8.8.8.8 -m 100   # same, using named options
 
 ## Development
 
@@ -40,10 +49,8 @@ To install this gem onto your local machine, run `bundle exec rake install`. To 
 
 ## Contributing
 
-Bug reports and pull requests are welcome on GitHub at https://github.com/[USERNAME]/network_tester.
-
+Bug reports and pull requests are welcome on GitHub at https://github.com/brianmd/network_tester.
 
 ## License
 
 The gem is available as open source under the terms of the [MIT License](http://opensource.org/licenses/MIT).
-

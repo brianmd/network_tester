@@ -7,3 +7,5 @@
 /pkg/
 /spec/reports/
 /tmp/
+.claude
+network_tester-*
